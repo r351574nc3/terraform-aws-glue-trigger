@@ -1,4 +1,56 @@
-variable "example" {
-  description = "Example variable"
-  default     = "hello world"
+variable "actions" {
+  description = "Arguments to be passed to the job action script."
+  type = list(object({
+    job_name     = string,
+    crawler_name = string,
+    arguments    = map(string),
+    timeout      = number
+  }))
+}
+
+variable "conditions" {
+  description = "Conditions for activating this trigger. Required for triggers where type is CONDITIONAL"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "default_run_properties" {
+  description = "(Optional) A map of default run properties for this workflow. These properties are passed to all jobs associated to the workflow."
+  type        = map(string)
+  default     = {}
+}
+
+variable "logical" {
+  description = "(Optional) How to handle multiple conditions. Defaults to AND. Valid values are AND or ANY."
+  type        = string
+  default     = "AND"
+}
+
+variable "max_concurrent_runs" {
+  description = "The maximum number of concurrent runs allowed for a job. The default is 1."
+  type        = number
+  default     = 1
+}
+
+variable "region" {
+  type        = string
+  description = "AWS Region"
+}
+
+variable "schedule" {
+  description = "Cron formatted schedule. Required for triggers with type SCHEDULED."
+  type        = string
+  default     = ""
+}
+
+variable "type" {
+  description = "The type of workflow. Options are CONDITIONAL or SCHEDULED."
+  type        = string
+  default     = "CONDITIONAL"
+}
+
+variable "workflow_name" {
+  description = "Name of the Glue workflow to be related to."
+  type        = string
+  default     = ""
 }

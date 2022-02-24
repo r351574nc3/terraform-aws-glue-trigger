@@ -1,14 +1,9 @@
 output "id" {
-  description = "ID of the created example"
-  value       = module.this.enabled ? module.this.id : null
+  description = "Workflow name"
+  value       = module.this.enabled ? aws_glue_trigger.this.id : null
 }
 
-output "example" {
-  description = "Example output"
-  value       = module.this.enabled ? local.example : null
-}
-
-output "random" {
-  description = "Stable random number for this example"
-  value       = module.this.enabled ? join("", random_integer.example[*].result) : null
+output "arn" {
+  description = "Amazon Resource Name (ARN) of Glue Workflow"
+  value       = module.this.enabled ? aws_glue_trigger.this.arn : null
 }
