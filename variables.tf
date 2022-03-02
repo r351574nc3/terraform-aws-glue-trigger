@@ -14,16 +14,15 @@ variable "conditions" {
   default     = []
 }
 
-variable "default_run_properties" {
-  description = "(Optional) A map of default run properties for this workflow. These properties are passed to all jobs associated to the workflow."
-  type        = map(string)
-  default     = {}
-}
-
 variable "logical" {
-  description = "(Optional) How to handle multiple conditions. Defaults to AND. Valid values are AND or ANY."
+  description = "How to handle multiple conditions. Defaults to AND. Valid values are AND or ANY."
   type        = string
   default     = "AND"
+
+  validation {
+    condition     = contains(["AND", "ANY"], var.logical)
+    error_message = "Supported values are AND and ANY."
+  }
 }
 
 variable "max_concurrent_runs" {
@@ -41,12 +40,22 @@ variable "schedule" {
   description = "Cron formatted schedule. Required for triggers with type SCHEDULED."
   type        = string
   default     = ""
+
+  validation {
+    condition     = can(regex("/(((\\d+,)+\\d+|(\\d+(\\/|-)\\d+)|\\d+|\\*) ?){5,7}/", var.schedule))
+    error_message = "The value must be a valid cron expression."
+  }
 }
 
 variable "type" {
   description = "The type of workflow. Options are CONDITIONAL or SCHEDULED."
   type        = string
   default     = "CONDITIONAL"
+
+  validation {
+    condition     = contains(["CONDITIONAL", "SCHEDULE"], var.type)
+    error_message = "Supported options are CONDITIONAL or SCHEDULED."
+  }
 }
 
 variable "workflow_name" {
